@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Text Editor</title>
+    <link rel="stylesheet" href="/stylesheet/editor.css">
+
+</head>
+
+<body>
+    <div class="files_title">
+        <input type="text" value="<%= text.title %>" />
+        .txt
+    </div>
+    <div class="editor-container">
+        <div class="toolbar">
+            <button onclick="formatText('bold')">Bold</button>
+            <button onclick="formatText('italic')">Italic</button>
+            <button onclick="formatText('underline')">Underline</button>
+            <button onclick="formatText('justifyLeft')">Align Left</button>
+            <button onclick="formatText('justifyCenter')">Align Center</button>
+            <button onclick="formatText('justifyRight')">Align Right</button>
+            <button onclick="formatText('justifyFull')">Justify</button>
+            <select onchange="changeFont(this.value)">
+                <option value="Arial">Arial</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Georgia">Georgia</option>
+            </select>
+            <select onchange="changeFontSize(this.value)">
+                <option value="1">Small</option>
+                <option value="3" selected>Normal</option>
+                <option value="5">Large</option>
+                <option value="7">Extra Large</option>
+            </select>
+            <select onchange="insertList(this.value)">
+                <option value>Bullets</option>
+                <option value="insertUnorderedList">Unordered List</option>
+                <option value="insertOrderedList">Ordered List</option>
+            </select>
+            <input type="color" onchange="changeTextColor(this.value)" title="Text Color">
+            <button onclick="saveContent()">Save</button>
+        </div>
+        <div class="editor" contenteditable="true">
+            <%- text.content %>
+        </div>
+    </div>
+
+    <script>
+        function formatText(command) {
+            document.execCommand(command, false, null);
+        }
+
+        function changeFont(fontName) {
+            document.execCommand('fontName', false, fontName);
+        }
+
+        function changeFontSize(size) {
+            document.execCommand('fontSize', false, size);
+        }
+
+        function changeTextColor(color) {
+            document.execCommand('foreColor', false, color);
+        }
+
+        function insertList(type) {
+            if (type) {
+                document.execCommand(type, false, null);
+            }
+        }
+
+        function saveContent() {
+            const title = document.querySelector(".files_title input").value;
+            const content = document.querySelector(".editor").innerHTML;
+
+            fetch('/update/<%=text._id%>', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, content })  // Send data to the backend
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("Saved successfully");
+                        window.location.href = "/";  // Redirect after saving
+                    } else {
+                        console.error("Failed to save");
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+        }
+    </script>
+</body>
+
+</html>

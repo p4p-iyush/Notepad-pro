@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheet/view.css">
+
+    
+</head>
+<body>
+    <nav>
+        <button class="awesome">    <a href="/">Home</a></button>
+        <button class="awesome"><a href="/edit/<%=text._id%>">Edit</a></button>
+        
+    </nav>
+    <div class="view_text">
+        <!-- <h2><%=text._id%></h2> -->
+        <h1><%=text.title%></h1>
+        <p><%-text.content%></p>
+    </div>
+</body>
+</html>

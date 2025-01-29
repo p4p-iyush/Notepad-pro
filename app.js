@@ -15,8 +15,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Route to the editors page
-app.get('/',  (req, res) => {
-    let allText =  userModel.find();
+app.get('/', async (req, res) => {
+    let allText = await userModel.find();
     let allTime = { Currentdate: new Date().toLocaleString() };
     res.render('index', { allText, allTime });
 });
@@ -98,5 +98,12 @@ app.get('/view/:id', async (req, res) => {
     }
 });
 
+
+// Start the server
+if (require.main === module) {
+    app.listen(port, () => {
+        console.log(`Server running at http://localhost:${port}`);
+    });
+}
 // Export the app as a serverless function for Vercel
 module.exports = app;

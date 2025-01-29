@@ -15,8 +15,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Route to the editors page
-app.get('/', async (req, res) => {
-    let allText = await userModel.find();
+app.get('/',  (req, res) => {
+    let allText =  userModel.find();
     let allTime = { Currentdate: new Date().toLocaleString() };
     res.render('index', { allText, allTime });
 });

@@ -105,5 +105,4 @@ if (require.main === module) {
         console.log(`Server running at http://localhost:${port}`);
     });
 }
-// Export the app as a serverless function for Vercel
-module.exports = app;
+ 

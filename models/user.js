@@ -1,17 +1,16 @@
+// Load environment variables
+require('dotenv').config();
 
+// Import Mongoose
 const mongoose = require('mongoose');
 
-// Use environment variable for the MongoDB URI
-const mongoURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/TextEditor'; // Default for local testing
-
-mongoose.connect(mongoURI, {
+// Connect to MongoDB Atlas using the connection string from .env
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-}).then(() => {
-  console.log("Connected to MongoDB!");
-}).catch((err) => {
-  console.log("Error connecting to MongoDB:", err);
-});
+})
+.then(() => console.log('MongoDB connected successfully'))
+.catch((err) => console.log('MongoDB connection error:', err));
 
 
 const UserSchema= mongoose.Schema({

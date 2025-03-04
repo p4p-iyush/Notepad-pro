@@ -19,6 +19,11 @@ const UserSchema= mongoose.Schema({
       type: String,
       required: true
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId, // Reference to the UserRegistration model
+    ref: 'UserRegistration', // Name of the referenced model
+    required: true
+},
   Currentdate: { type: Date, default: Date.now } 
 
 })

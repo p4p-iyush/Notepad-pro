@@ -12,6 +12,7 @@
             <a href="editors">Add new file</a>
         </nav>
 
+        <h1>Welcome, <%= username %>!</h1>
         <div class="main_container">
             <!-- Displaying all the text files -->
             <% allText.forEach((text) => { %>
@@ -19,7 +20,12 @@
                 <div class="files_details">
                     <h1 class="file title"><%= text.title %></h1>
                     <h2 class="files_description"><%- text.content %></h2>
-                    <h2 class="file_time"><%= allTime.Currentdate %></h2>
+                    <h2 class="file_time"><%= text.Currentdate %></h2>
+                    <% if (text.user) { %>
+                        <h2 class="file_time">Created by: <%= text.user.name %></h2>
+                    <% } else { %>
+                        <h2 class="file_time">Created by: User</h2>
+                    <% } %>                    
                     <div class="btns">
                         <button class="btnDelete">
                             <a href="/delete/<%= text._id %>">Delete</a>

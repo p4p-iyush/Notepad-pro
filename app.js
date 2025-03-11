@@ -156,7 +156,7 @@ app.get('/edit/:id', requireAuth, async (req, res) => {
     }
 });
 // ✅ Update Text Content
-app.put('/update/:id', requireAuth, async (req, res) => {
+app.post('/update/:id', requireAuth, async (req, res) => {
     try {
         const { content } = req.body;
         if (!content) return res.status(400).json({ error: "Content is required" });

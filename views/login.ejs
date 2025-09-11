@@ -3,23 +3,378 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/stylesheet/login.css">
+    <title>CodeNotes - Login & Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Add Toastify CSS & JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'editor-bg': '#0d1117',
+              'editor-card': '#161b22',
+              'editor-border': '#30363d',
+              'editor-accent': '#58a6ff',
+              'editor-accent-dark': '#1f6feb',
+              'editor-text': '#f0f6fc',
+              'editor-text-dim': '#7d8590',
+              'code-green': '#7c3aed',
+              'code-blue': '#06b6d4',
+              'code-purple': '#8b5cf6',
+            },
+            animation: {
+              'float': 'float 3s ease-in-out infinite',
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'slide-in': 'slideIn 0.5s ease-out',
+              'fade-in': 'fadeIn 0.6s ease-out',
+              'code-typing': 'typing 4s steps(40, end), blink-caret 0.75s step-end infinite',
+            },
+            keyframes: {
+              float: {
+                '0%, 100%': { transform: 'translateY(0px)' },
+                '50%': { transform: 'translateY(-10px)' }
+              },
+              slideIn: {
+                '0%': { transform: 'translateX(100%)', opacity: '0' },
+                '100%': { transform: 'translateX(0)', opacity: '1' }
+              },
+              fadeIn: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' }
+              },
+              typing: {
+                'from': { width: '0' },
+                'to': { width: '100%' }
+              },
+              'blink-caret': {
+                '0%, 50%': { 'border-color': 'transparent' },
+                '51%, 100%': { 'border-color': '#58a6ff' }
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+      .code-bg {
+        background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .code-bg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+          radial-gradient(circle at 25% 25%, #58a6ff15 0%, transparent 50%),
+          radial-gradient(circle at 75% 75%, #7c3aed15 0%, transparent 50%);
+        animation: pulse-slow 4s ease-in-out infinite;
+      }
 
-    
+      .typing-animation {
+        width: 0;
+        animation: typing 4s steps(40, end) infinite, blink-caret 0.75s step-end infinite;
+        white-space: nowrap;
+        overflow: hidden;
+        border-right: 3px solid #58a6ff;
+      }
+
+      .glass-effect {
+        backdrop-filter: blur(10px);
+        background: rgba(22, 27, 34, 0.8);
+        border: 1px solid rgba(88, 166, 255, 0.2);
+      }
+
+      .form-slide {
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .input-glow:focus {
+        box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+      }
+    </style>
 </head>
-<body>
-    <div class="login_main">
-        <form action="login" method="post">
-            <label for="username">Username:</label>
-            <input type="text" name="username" id="username">
-            <label for="password">Password:</label> 
-            <input type="password" name="password" id="password">
-            <input type="submit" value="Login">
-
-            <p>Don't have an account ? <a href="/register">Register</a></p>
-
-        </form>
+<body class="code-bg min-h-screen flex items-center justify-center p-4 font-mono">
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-10 left-10 w-20 h-20 border-2 border-editor-accent opacity-20 rotate-45 animate-spin"></div>
+        <div class="absolute top-32 right-20 w-16 h-16 border-2 border-code-purple opacity-30 animate-bounce"></div>
+        <div class="absolute bottom-20 left-20 w-24 h-24 border-2 border-code-blue opacity-25 animate-pulse"></div>
+        <div class="absolute bottom-32 right-32 w-12 h-12 border-2 border-code-green opacity-20 rotate-12 animate-float"></div>
     </div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 w-full max-w-6xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-8 items-center">
+            
+            <!-- Left Side - Hero Content -->
+            <div class="text-center lg:text-left animate-fade-in">
+                <div class="mb-8">
+                    <h1 class="text-5xl lg:text-6xl font-bold text-editor-text mb-4">
+                        <i class="fas fa-code text-editor-accent mr-4"></i>
+                        Code<span class="text-editor-accent">Notes</span>
+                    </h1>
+                    <div class="text-xl text-editor-text-dim mb-6 h-8">
+                        <span class="typing-animation">Your personal coding sanctuary...</span>
+                    </div>
+                    <p class="text-lg text-editor-text-dim leading-relaxed">
+                        Write, organize, and share your code snippets and notes in a beautiful, developer-friendly environment.
+                    </p>
+                </div>
+
+                <!-- Features -->
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div class="glass-effect rounded-lg p-4 animate-float">
+                        <i class="fas fa-code text-editor-accent text-2xl mb-2 block"></i>
+                        <h3 class="text-editor-text font-semibold mb-1">Code Syntax</h3>
+                        <p class="text-editor-text-dim">Syntax highlighting</p>
+                    </div>
+                    <div class="glass-effect rounded-lg p-4 animate-float" style="animation-delay: 0.2s">
+                        <i class="fas fa-share-alt text-code-purple text-2xl mb-2 block"></i>
+                        <h3 class="text-editor-text font-semibold mb-1">Share & Collaborate</h3>
+                        <p class="text-editor-text-dim">Public & private notes</p>
+                    </div>
+                    <div class="glass-effect rounded-lg p-4 animate-float" style="animation-delay: 0.4s">
+                        <i class="fas fa-palette text-code-blue text-2xl mb-2 block"></i>
+                        <h3 class="text-editor-text font-semibold mb-1">Rich Editor</h3>
+                        <p class="text-editor-text-dim">Formatting tools</p>
+                    </div>
+                    <div class="glass-effect rounded-lg p-4 animate-float" style="animation-delay: 0.6s">
+                        <i class="fas fa-cloud text-code-green text-2xl mb-2 block"></i>
+                        <h3 class="text-editor-text font-semibold mb-1">Cloud Sync</h3>
+                        <p class="text-editor-text-dim">Access anywhere</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side - Auth Forms -->
+            <div class="animate-slide-in">
+                <div class="glass-effect rounded-2xl p-8 shadow-2xl relative overflow-hidden">
+                    
+                    <!-- Toggle Buttons -->
+                    <div class="flex mb-8 bg-editor-bg rounded-lg p-1">
+                        <button onclick="switchToLogin()" id="loginTab" 
+                                class="flex-1 py-3 px-4 text-center rounded-md transition-all duration-300 font-semibold bg-editor-accent text-white">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Login
+                        </button>
+                        <button onclick="switchToRegister()" id="registerTab"
+                                class="flex-1 py-3 px-4 text-center rounded-md transition-all duration-300 font-semibold text-editor-text-dim hover:text-editor-text">
+                            <i class="fas fa-user-plus mr-2"></i>Register
+                        </button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <div id="loginForm" class="form-slide">
+                        <form action="/login" method="post" class="space-y-6">
+                            <div class="text-center mb-8">
+                                <h2 class="text-2xl font-bold text-editor-text mb-2">Welcome Back!</h2>
+                                <p class="text-editor-text-dim">Sign in to continue your coding journey</p>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="username" class="block text-sm font-semibold text-editor-text mb-2">
+                                        <i class="fas fa-user mr-2"></i>Username
+                                    </label>
+                                    <input type="text" name="username" id="username" required
+                                           class="w-full px-4 py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300"
+                                           placeholder="Enter your username">
+                                </div>
+
+                                <div>
+                                    <label for="password" class="block text-sm font-semibold text-editor-text mb-2">
+                                        <i class="fas fa-lock mr-2"></i>Password
+                                    </label>
+                                    <input type="password" name="password" id="password" required
+                                           class="w-full px-4 py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300"
+                                           placeholder="Enter your password">
+                                </div>
+                            </div>
+
+                            <button type="submit" 
+                                    class="w-full bg-gradient-to-r from-editor-accent to-editor-accent-dark hover:from-editor-accent-dark hover:to-editor-accent text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                <i class="fas fa-rocket mr-2"></i>Launch Into CodeNotes
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Register Form -->
+                    <div id="registerForm" class="form-slide hidden">
+                        <form action="/register" method="post" class="space-y-6">
+                            <div class="text-center mb-8">
+                                <h2 class="text-2xl font-bold text-editor-text mb-2">Join CodeNotes</h2>
+                                <p class="text-editor-text-dim">Create your developer account</p>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="reg-username" class="block text-sm font-semibold text-editor-text mb-2">
+                                        <i class="fas fa-user mr-2"></i>Username
+                                    </label>
+                                    <input type="text" name="name" id="reg-username" required
+                                           class="w-full px-4 py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300"
+                                           placeholder="Choose a username">
+                                </div>
+
+                                <div>
+                                    <label for="email" class="block text-sm font-semibold text-editor-text mb-2">
+                                        <i class="fas fa-envelope mr-2"></i>Email
+                                    </label>
+                                    <input type="email" name="email" id="email" required
+                                           class="w-full px-4 py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300"
+                                           placeholder="Enter your email">
+                                </div>
+
+                                <div>
+                                    <label for="reg-password" class="block text-sm font-semibold text-editor-text mb-2">
+                                        <i class="fas fa-lock mr-2"></i>Password
+                                    </label>
+                                    <input type="password" name="password" id="reg-password" required
+                                           class="w-full px-4 py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300"
+                                           placeholder="Create a password">
+                                </div>
+
+                                <div>
+                                    <label for="confirm_password" class="block text-sm font-semibold text-editor-text mb-2">
+                                        <i class="fas fa-check-circle mr-2"></i>Confirm Password
+                                    </label>
+                                    <input type="password" name="confirm_password" id="confirm_password" required
+                                           class="w-full px-4 py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300"
+                                           placeholder="Confirm your password">
+                                </div>
+                            </div>
+
+                            <button type="submit" 
+                                    class="w-full bg-gradient-to-r from-code-purple to-code-blue hover:from-code-blue hover:to-code-purple text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                <i class="fas fa-user-plus mr-2"></i>Create Developer Account
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Back to Home -->
+                    <div class="mt-6 text-center">
+                        <a href="/" class="text-editor-text-dim hover:text-editor-accent transition-colors duration-300 inline-flex items-center">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            Back to CodeNotes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchToLogin() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            
+            document.getElementById('loginTab').classList.add('bg-editor-accent', 'text-white');
+            document.getElementById('loginTab').classList.remove('text-editor-text-dim');
+            
+            document.getElementById('registerTab').classList.remove('bg-editor-accent', 'text-white');
+            document.getElementById('registerTab').classList.add('text-editor-text-dim');
+        }
+
+        function switchToRegister() {
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.getElementById('loginForm').classList.add('hidden');
+            
+            document.getElementById('registerTab').classList.add('bg-editor-accent', 'text-white');
+            document.getElementById('registerTab').classList.remove('text-editor-text-dim');
+            
+            document.getElementById('loginTab').classList.remove('bg-editor-accent', 'text-white');
+            document.getElementById('loginTab').classList.add('text-editor-text-dim');
+        }
+
+        // Auto-start typing animation
+        window.addEventListener('load', function() {
+            const typingTexts = [
+                'Your personal coding sanctuary...',
+                'Write beautiful code snippets...',
+                'Organize your development notes...',
+                'Share knowledge with developers...'
+            ];
+            let currentIndex = 0;
+            const typingElement = document.querySelector('.typing-animation');
+            
+            function typeText() {
+                typingElement.style.width = '0';
+                typingElement.textContent = typingTexts[currentIndex];
+                
+                setTimeout(() => {
+                    currentIndex = (currentIndex + 1) % typingTexts.length;
+                    typeText();
+                }, 4000);
+            }
+            
+            typeText();
+        });
+
+        // Form validation for register
+        document.getElementById('registerForm').querySelector('form').addEventListener('submit', function(e) {
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Passwords do not match!');
+                return false;
+            }
+        });
+
+        // Add focus effects to inputs
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('scale-105');
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('scale-105');
+            });
+        });
+    </script>
+    <!-- Set data in script-accessible way -->
+<script>
+  window.flashMessages = {
+    success: '<%= typeof success !== "undefined" ? success : "" %>',
+    error: '<%= typeof error !== "undefined" ? error : "" %>',
+    warning: '<%= typeof warning !== "undefined" ? warning : "" %>'
+  };
+</script>
+
+<!-- Clean JavaScript -->
+<script>
+  if (window.flashMessages.success) {
+    Toastify({
+      text: window.flashMessages.success,
+      duration: 3000,
+      style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
+    }).showToast();
+  }
+  
+  if (window.flashMessages.error) {
+    Toastify({
+      text: window.flashMessages.error,
+      duration: 3000,
+      style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
+    }).showToast();
+  }
+  
+  if (window.flashMessages.warning) {
+    Toastify({
+      text: window.flashMessages.warning,
+      duration: 3000,
+      style: { background: "linear-gradient(to right, #ffa726, #ffcc02)" }
+    }).showToast();
+  }
+</script>
+
 </body>
 </html>

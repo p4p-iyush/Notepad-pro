@@ -1,43 +1,319 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Homepage</title>
-    <link rel="stylesheet" href="/stylesheet/style.css">
-    </head>
-    <body>
-        <!-- Navigation bar -->
-        <nav>
-            <a href="editors">Add new file</a>
-        </nav>
-
-        <h1>Welcome, <%= username %>!</h1>
-        <div class="main_container">
-            <!-- Displaying all the text files -->
-            <% allText.forEach((text) => { %>
-            <a href="/view/<%=text._id%>">
-                <div class="files_details">
-                    <h1 class="file title"><%= text.title %></h1>
-                    <h2 class="files_description"><%- text.content %></h2>
-                    <h2 class="file_time"><%= text.Currentdate %></h2>
-                    <% if (text.user) { %>
-                        <h2 class="file_time">Created by: <%= text.user.name %></h2>
-                    <% } else { %>
-                        <h2 class="file_time">Created by: User</h2>
-                    <% } %>                    
-                    <div class="btns">
-                        <button class="btnDelete">
-                            <a href="/delete/<%= text._id %>">Delete</a>
-                        </button>
-
-                        <button class="btnEdit">
-                            <a href="/edit/<%= text._id %>">Edit</a>
-                        </button>
-                    </div>
-                </div>
-            </a>
-            <% }) %>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodeNotes - Your Personal Text Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "editor-bg": "#1a1a1a",
+              "editor-sidebar": "#252526",
+              "editor-card": "#2d2d30",
+              "editor-hover": "#37373d",
+              "editor-accent": "#007acc",
+              "editor-text": "#cccccc",
+              "editor-text-dim": "#969696",
+              "code-bg": "#1e1e1e",
+            },
+          },
+        },
+      };
+    </script>
+    <!-- Add Toastify CSS & JS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+        <style>
+      .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body class="bg-editor-bg text-editor-text min-h-screen font-mono">
+    <!-- Navigation bar -->
+    <nav
+      class="bg-editor-sidebar border-b border-gray-700 px-6 py-4 sticky top-0 z-50"
+    >
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <h1 class="text-xl font-bold text-white flex items-center">
+            <i class="fas fa-code mr-2 text-editor-accent"></i>
+            CodeNotes
+          </h1>
         </div>
-    </body>
+
+        <div class="flex items-center space-x-4">
+          <a
+            href="/editors"
+            class="bg-editor-accent hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-all duration-200 flex items-center space-x-2 shadow-lg hover:shadow-xl"
+          >
+            <i class="fas fa-plus"></i>
+            <span>New File</span>
+          </a>
+
+          <% if (username) { %>
+          <div class="flex items-center space-x-3">
+            <span class="text-editor-text-dim">
+              <i class="fas fa-user-circle mr-1"></i>
+              <%= username %>
+            </span>
+            <a
+              href="/logout"
+              class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-all duration-200 flex items-center space-x-2"
+            >
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </div>
+          <% } else { %>
+          <a
+            href="/login"
+            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-all duration-200 flex items-center space-x-2"
+          >
+            <i class="fas fa-sign-in-alt"></i>
+            <span>Login</span>
+          </a>
+          <% } %>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Welcome Header -->
+    <% if (username) { %>
+    <div
+      class="bg-gradient-to-r from-editor-accent to-blue-600 text-white py-8"
+    >
+      <div class="max-w-7xl mx-auto px-6">
+        <h1 class="text-3xl font-bold mb-2">
+          <i class="fas fa-wave-square mr-2"></i>
+          Welcome back, <%= username %>!
+        </h1>
+        <p class="text-blue-100">Manage your notes and code snippets</p>
+      </div>
+    </div>
+    <% } else { %>
+    <div class="bg-gradient-to-r from-gray-800 to-gray-700 text-white py-8">
+      <div class="max-w-7xl mx-auto px-6 text-center">
+        <h1 class="text-4xl font-bold mb-4">
+          <i class="fas fa-file-code mr-3 text-editor-accent"></i>
+          CodeNotes
+        </h1>
+        <p class="text-xl text-gray-300 mb-6">
+          A modern text editor for developers
+        </p>
+        <a
+          href="/login"
+          class="bg-editor-accent hover:bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-200 inline-flex items-center space-x-2"
+        >
+          <i class="fas fa-rocket"></i>
+          <span>Get Started</span>
+        </a>
+      </div>
+    </div>
+    <% } %>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-6 py-8">
+      <% if (allText.length > 0) { %>
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold text-white mb-2 flex items-center">
+          <i class="fas fa-folder-open mr-2 text-editor-accent"></i>
+          <% if (username) { %>Your Files<% } else { %>Public Files<% } %>
+        </h2>
+        <p class="text-editor-text-dim">
+          <% if (username) { %> Manage your personal notes and code snippets <%
+          } else { %> Explore public notes shared by the community <% } %>
+        </p>
+      </div>
+
+      <!-- Files Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% allText.forEach((text) => { %>
+        <div
+          class="bg-editor-card border border-gray-600 rounded-xl overflow-hidden hover:bg-editor-hover transition-all duration-200 hover:border-editor-accent group hover:shadow-xl"
+        >
+          <a href="/view/<%= text._id %>" class="block">
+            <div class="p-6">
+              <!-- File Header -->
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex-1">
+                  <h3
+                    class="text-lg font-semibold text-white group-hover:text-editor-accent transition-colors duration-200 flex items-center"
+                  >
+                    <i class="fas fa-file-alt mr-2 text-editor-text-dim"></i>
+                    <%= text.title || 'Untitled' %>
+                  </h3>
+                  <div
+                    class="flex items-center space-x-4 text-sm text-editor-text-dim mt-2"
+                  >
+                    <span class="flex items-center">
+                      <i class="fas fa-calendar-alt mr-1"></i>
+                      <%= text.Currentdate ? new
+                      Date(text.Currentdate).toLocaleDateString() : 'No date' %>
+                    </span>
+                    <% if (text.isPublic) { %>
+                    <span
+                      class="bg-green-600 text-white px-2 py-1 rounded-full text-xs flex items-center"
+                    >
+                      <i class="fas fa-globe mr-1"></i>
+                      Public
+                    </span>
+                    <% } else { %>
+                    <span
+                      class="bg-gray-600 text-white px-2 py-1 rounded-full text-xs flex items-center"
+                    >
+                      <i class="fas fa-lock mr-1"></i>
+                      Private
+                    </span>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Content Preview -->
+              <div class="mb-4">
+                <div
+                  class="text-editor-text-dim text-sm line-clamp-3 leading-relaxed"
+                >
+                  <%- text.content ? text.content.replace(/<[^>]*>/g,
+                  '').substring(0, 120) + '...' : 'No content' %>
+                </div>
+              </div>
+
+              <!-- Author Info -->
+              <div
+                class="flex items-center justify-between pt-4 border-t border-gray-600"
+              >
+                <div class="flex items-center text-sm text-editor-text-dim">
+                  <i class="fas fa-user-circle mr-2"></i>
+                  <% if (text.user) { %> Created by <%= username || 'User' %> <%
+                  } else { %> Created by Anonymous <% } %>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Action Buttons (only for authenticated user's own files) -->
+          <% if (username && text.user) { %>
+          <div class="px-6 pb-6">
+            <div class="flex space-x-3">
+              <a
+                href="/edit/<%= text._id %>"
+                class="flex-1 bg-editor-accent hover:bg-blue-600 text-white text-center py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 text-sm"
+              >
+                <i class="fas fa-edit"></i>
+                <span>Edit</span>
+              </a>
+              <a
+                href="/delete/<%= text._id %>"
+                onclick="return confirm('Are you sure you want to delete this file?')"
+                class="flex-1 bg-red-600 hover:bg-red-700 text-white text-center py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 text-sm"
+              >
+                <i class="fas fa-trash"></i>
+                <span>Delete</span>
+              </a>
+            </div>
+          </div>
+          <% } %>
+        </div>
+        <% }); %>
+      </div>
+      <% } else { %>
+      <!-- Empty State -->
+      <div class="text-center py-16">
+        <div
+          class="bg-editor-card rounded-2xl p-12 max-w-md mx-auto border border-gray-600"
+        >
+          <i class="fas fa-file-plus text-6xl text-editor-text-dim mb-6"></i>
+          <h3 class="text-xl font-semibold text-white mb-4">
+            <% if (username) { %> No files yet <% } else { %> No public files
+            available <% } %>
+          </h3>
+          <p class="text-editor-text-dim mb-6">
+            <% if (username) { %> Create your first note or code snippet to get
+            started <% } else { %> Login to create and share your own files <% }
+            %>
+          </p>
+          <% if (username) { %>
+          <a
+            href="/editors"
+            class="bg-editor-accent hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 inline-flex items-center space-x-2"
+          >
+            <i class="fas fa-plus"></i>
+            <span>Create First File</span>
+          </a>
+          <% } else { %>
+          <a
+            href="/login"
+            class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 inline-flex items-center space-x-2"
+          >
+            <i class="fas fa-sign-in-alt"></i>
+            <span>Login to Start</span>
+          </a>
+          <% } %>
+        </div>
+      </div>
+      <% } %>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-editor-sidebar border-t border-gray-700 py-8 mt-16">
+      <div class="max-w-7xl mx-auto px-6 text-center">
+        <p class="text-editor-text-dim">
+          <i class="fas fa-code mr-2"></i>
+          CodeNotes - Modern Text Editor for Developers
+        </p>
+      </div>
+    </footer>
+
+<!-- Set data in script-accessible way -->
+<script>
+  window.flashMessages = {
+    success: '<%= typeof success !== "undefined" ? success : "" %>',
+    error: '<%= typeof error !== "undefined" ? error : "" %>',
+    warning: '<%= typeof warning !== "undefined" ? warning : "" %>'
+  };
+</script>
+
+<!-- Clean JavaScript -->
+<script>
+  if (window.flashMessages.success) {
+    Toastify({
+      text: window.flashMessages.success,
+      duration: 3000,
+      style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
+    }).showToast();
+  }
+  
+  if (window.flashMessages.error) {
+    Toastify({
+      text: window.flashMessages.error,
+      duration: 3000,
+      style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
+    }).showToast();
+  }
+  
+  if (window.flashMessages.warning) {
+    Toastify({
+      text: window.flashMessages.warning,
+      duration: 3000,
+      style: { background: "linear-gradient(to right, #ffa726, #ffcc02)" }
+    }).showToast();
+  }
+</script>
+
+  </body>
 </html>

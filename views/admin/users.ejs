@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'admin-bg': '#0f172a',
+              'admin-card': '#1e293b',
+              'admin-border': '#334155',
+              'admin-accent': '#3b82f6',
+              'admin-text': '#f1f5f9',
+              'admin-text-dim': '#94a3b8',
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-admin-bg text-admin-text min-h-screen">
+    <!-- Header -->
+    <header class="bg-admin-card border-b border-admin-border px-6 py-4">
+        <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-admin-text flex items-center">
+                <i class="fas fa-users text-admin-accent mr-3"></i>
+                User Management
+            </h1>
+            <div class="flex items-center space-x-4">
+                <a href="/admin" class="text-admin-text-dim hover:text-admin-text">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
+                </a>
+                <a href="/logout" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-admin-card border-b border-admin-border px-6 py-3">
+        <div class="flex space-x-6">
+            <a href="/admin" class="text-admin-text-dim hover:text-admin-text">
+                <i class="fas fa-chart-bar mr-2"></i>Dashboard
+            </a>
+            <a href="/admin/users" class="text-admin-accent border-b-2 border-admin-accent pb-2">
+                <i class="fas fa-users mr-2"></i>Users
+            </a>
+            <a href="/admin/documents" class="text-admin-text-dim hover:text-admin-text">
+                <i class="fas fa-file-alt mr-2"></i>Documents
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="p-6">
+        <!-- Search and Stats -->
+        <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+            <div>
+                <h2 class="text-xl font-semibold text-admin-text">All Users (<%= total %>)</h2>
+                <p class="text-admin-text-dim">Manage user accounts and permissions</p>
+            </div>
+            
+            <form class="flex space-x-2" method="GET">
+                <input type="text" name="search" value="<%= searchQuery %>" 
+                       placeholder="Search users..." 
+                       class="bg-admin-card border border-admin-border rounded-lg px-4 py-2 text-admin-text placeholder-admin-text-dim focus:border-admin-accent focus:outline-none">
+                <button type="submit" class="bg-admin-accent hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Users Table -->
+        <div class="bg-admin-card border border-admin-border rounded-lg overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-admin-bg">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-admin-text-dim uppercase tracking-wider">User</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-admin-text-dim uppercase tracking-wider">Role</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-admin-text-dim uppercase tracking-wider">Documents</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-admin-text-dim uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-admin-text-dim uppercase tracking-wider">Joined</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-admin-text-dim uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-admin-border">
+                    <% users.forEach(user => { %>
+                    <tr class="hover:bg-admin-bg">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <div class="h-10 w-10 rounded-full bg-admin-accent flex items-center justify-center">
+                                        <span class="text-white font-medium"><%= user.name.charAt(0).toUpperCase() %></span>
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-admin-text"><%= user.name %></div>
+                                    <div class="text-sm text-admin-text-dim"><%= user.email %></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full <%= user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800' %>">
+                                <%= user.role %>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-admin-text">
+                            <%= user.documentCount %>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full <%= user.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+                                <%= user.isActive ? 'Active' : 'Inactive' %>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-admin-text-dim">
+                            <%= new Date(user.createdAt).toLocaleDateString() %>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
+                            <form method="POST" action="/admin/users/<%= user._id %>/toggle-role" class="inline">
+                                <button type="submit" class="text-blue-400 hover:text-blue-300" title="Toggle Role">
+                                    <i class="fas fa-user-shield"></i>
+                                </button>
+                            </form>
+                            <form method="POST" action="/admin/users/<%= user._id %>/toggle-status" class="inline">
+                                <button type="submit" class="text-yellow-400 hover:text-yellow-300" title="Toggle Status">
+                                    <i class="fas fa-power-off"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <% if (totalPages > 1) { %>
+        <div class="mt-6 flex items-center justify-between">
+            <div class="text-sm text-admin-text-dim">
+                Page <%= currentPage %> of <%= totalPages %>
+            </div>
+            <div class="flex space-x-2">
+                <% if (currentPage > 1) { %>
+                <a href="?page=<%= currentPage - 1 %>&search=<%= searchQuery %>" 
+                   class="bg-admin-card border border-admin-border text-admin-text px-3 py-2 rounded-lg hover:bg-admin-bg">
+                    Previous
+                </a>
+                <% } %>
+                <% if (currentPage < totalPages) { %>
+                <a href="?page=<%= currentPage + 1 %>&search=<%= searchQuery %>" 
+                   class="bg-admin-accent text-white px-3 py-2 rounded-lg hover:bg-blue-600">
+                    Next
+                </a>
+                <% } %>
+            </div>
+        </div>
+        <% } %>
+    </main>
+
+    <!-- Flash Messages -->
+    <script>
+      window.flashMessages = {
+        success: '<%= typeof success !== "undefined" ? success : "" %>',
+        error: '<%= typeof error !== "undefined" ? error : "" %>'
+      };
+    </script>
+
+    <script>
+      if (window.flashMessages.success) {
+        Toastify({
+          text: window.flashMessages.success,
+          duration: 3000,
+          style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
+        }).showToast();
+      }
+      
+      if (window.flashMessages.error) {
+        Toastify({
+          text: window.flashMessages.error,
+          duration: 3000,
+          style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
+        }).showToast();
+      }
+    </script>
+</body>
+</html>

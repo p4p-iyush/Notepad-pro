@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const userRegistrationSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -15,7 +14,21 @@ const userRegistrationSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    isActive: {
+        type: Boolean,
+        default: true
     }
 });
+
 
 module.exports = mongoose.model('UserRegistration', userRegistrationSchema);

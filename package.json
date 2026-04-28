@@ -28,7 +28,9 @@
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.13.0",
-    "mongoose": "^8.11.0"
+    "mongoose": "^8.11.0",
+    "multer": "^2.0.2",
+    "pdf2html": "^4.4.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

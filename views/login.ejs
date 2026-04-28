@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeNotes - Login & Register</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <!-- Add Toastify CSS & JS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script>
       tailwind.config = {
         theme: {
@@ -52,6 +52,9 @@
                 '0%, 50%': { 'border-color': 'transparent' },
                 '51%, 100%': { 'border-color': '#58a6ff' }
               }
+            },
+            screens: {
+              'xs': '475px',
             }
           }
         }
@@ -63,6 +66,7 @@
         background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
         position: relative;
         overflow: hidden;
+        min-height: 100vh;
       }
       
       .code-bg::before {
@@ -79,7 +83,8 @@
       }
 
       .typing-animation {
-        width: 0;
+        display: inline-block;
+        width: auto;
         animation: typing 4s steps(40, end) infinite, blink-caret 0.75s step-end infinite;
         white-space: nowrap;
         overflow: hidden;
@@ -87,9 +92,10 @@
       }
 
       .glass-effect {
-        backdrop-filter: blur(10px);
-        background: rgba(22, 27, 34, 0.8);
+        backdrop-filter: blur(16px);
+        background: rgba(22, 27, 34, 0.85);
         border: 1px solid rgba(88, 166, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       }
 
       .form-slide {
@@ -98,56 +104,78 @@
 
       .input-glow:focus {
         box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+        transform: translateY(-1px);
+      }
+
+      /* Mobile optimizations */
+      @media (max-width: 768px) {
+        .typing-animation {
+          font-size: 1rem;
+        }
+        
+        .hero-title {
+          font-size: 2.5rem !important;
+        }
+        
+        .feature-grid {
+          grid-template-columns: 1fr !important;
+        }
+      }
+
+      @media (max-width: 475px) {
+        .hero-title {
+          font-size: 2rem !important;
+        }
       }
     </style>
 </head>
-<body class="code-bg min-h-screen flex items-center justify-center p-4 font-mono">
-    <!-- Animated Background Elements -->
+<body class="code-bg flex items-center justify-center p-2 sm:p-4 font-mono">
+    <!-- Animated Background Elements - Responsive -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-10 left-10 w-20 h-20 border-2 border-editor-accent opacity-20 rotate-45 animate-spin"></div>
-        <div class="absolute top-32 right-20 w-16 h-16 border-2 border-code-purple opacity-30 animate-bounce"></div>
-        <div class="absolute bottom-20 left-20 w-24 h-24 border-2 border-code-blue opacity-25 animate-pulse"></div>
-        <div class="absolute bottom-32 right-32 w-12 h-12 border-2 border-code-green opacity-20 rotate-12 animate-float"></div>
+        <div class="absolute top-4 left-4 sm:top-10 sm:left-10 w-12 h-12 sm:w-20 sm:h-20 border-2 border-editor-accent opacity-20 rotate-45 animate-spin"></div>
+        <div class="absolute top-16 right-8 sm:top-32 sm:right-20 w-10 h-10 sm:w-16 sm:h-16 border-2 border-code-purple opacity-30 animate-bounce"></div>
+        <div class="absolute bottom-8 left-8 sm:bottom-20 sm:left-20 w-16 h-16 sm:w-24 sm:h-24 border-2 border-code-blue opacity-25 animate-pulse"></div>
+        <div class="absolute bottom-16 right-16 sm:bottom-32 sm:right-32 w-8 h-8 sm:w-12 sm:h-12 border-2 border-code-green opacity-20 rotate-12 animate-float"></div>
     </div>
 
-    <!-- Main Container -->
-    <div class="relative z-10 w-full max-w-6xl mx-auto">
-        <div class="grid lg:grid-cols-2 gap-8 items-center">
+    <!-- Main Container - Responsive -->
+    <div class="relative z-10 w-full max-w-7xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-4 lg:gap-8 items-center min-h-screen lg:min-h-0">
             
             <!-- Left Side - Hero Content -->
-            <div class="text-center lg:text-left animate-fade-in">
-                <div class="mb-8">
-                    <h1 class="text-5xl lg:text-6xl font-bold text-editor-text mb-4">
-                        <i class="fas fa-code text-editor-accent mr-4"></i>
+            <div class="text-center lg:text-left animate-fade-in order-2 lg:order-1 px-4 lg:px-0">
+                <div class="mb-6 lg:mb-8">
+                    <h1 class="hero-title text-4xl sm:text-5xl lg:text-6xl font-bold text-editor-text mb-4">
+                        <i class="fas fa-code text-editor-accent mr-2 lg:mr-4"></i>
                         Code<span class="text-editor-accent">Notes</span>
                     </h1>
-                    <div class="text-xl text-editor-text-dim mb-6 h-8">
+                    <div class="text-lg sm:text-xl text-editor-text-dim mb-4 lg:mb-6 h-6 sm:h-8">
                         <span class="typing-animation">Your personal coding sanctuary...</span>
                     </div>
-                    <p class="text-lg text-editor-text-dim leading-relaxed">
+                    <p class="text-base lg:text-lg text-editor-text-dim leading-relaxed max-w-md lg:max-w-none mx-auto lg:mx-0">
                         Write, organize, and share your code snippets and notes in a beautiful, developer-friendly environment.
                     </p>
                 </div>
 
-                <!-- Features -->
-                <div class="grid grid-cols-2 gap-4 text-sm">
-                    <div class="glass-effect rounded-lg p-4 animate-float">
-                        <i class="fas fa-code text-editor-accent text-2xl mb-2 block"></i>
+                <!-- Features - Responsive Grid -->
+                <div class="feature-grid grid grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
+                    <div class="glass-effect rounded-lg p-3 sm:p-4 animate-float">
+                        <i class="fas fa-code text-editor-accent text-xl sm:text-2xl mb-2 block"></i>
                         <h3 class="text-editor-text font-semibold mb-1">Code Syntax</h3>
                         <p class="text-editor-text-dim">Syntax highlighting</p>
                     </div>
-                    <div class="glass-effect rounded-lg p-4 animate-float" style="animation-delay: 0.2s">
-                        <i class="fas fa-share-alt text-code-purple text-2xl mb-2 block"></i>
+                    <div class="glass-effect rounded-lg p-3 sm:p-4 animate-float" style="animation-delay: 0.2s">
+                        <i class="fas fa-share-alt text-code-purple text-xl sm:text-2xl mb-2 block"></i>
                         <h3 class="text-editor-text font-semibold mb-1">Share & Collaborate</h3>
                         <p class="text-editor-text-dim">Public & private notes</p>
                     </div>
-                    <div class="glass-effect rounded-lg p-4 animate-float" style="animation-delay: 0.4s">
-                        <i class="fas fa-palette text-code-blue text-2xl mb-2 block"></i>
+                    <div class="glass-effect rounded-lg p-3 sm:p-4 animate-float" style="animation-delay: 0.4s">
+                        <i class="fas fa-palette text-code-blue text-xl sm:text-2xl mb-2 block"></i>
                         <h3 class="text-editor-text font-semibold mb-1">Rich Editor</h3>
                         <p class="text-editor-text-dim">Formatting tools</p>
                     </div>
-                    <div class="glass-effect rounded-lg p-4 animate-float" style="animation-delay: 0.6s">
-                        <i class="fas fa-cloud text-code-green text-2xl mb-2 block"></i>
+                    <div class="glass-effect rounded-lg p-3 sm:p-4 animate-float" style="animation-delay: 0.6s">
+                        <i class="fas fa-cloud text-code-green text-xl sm:text-2xl mb-2 block"></i>
                         <h3 class="text-editor-text font-semibold mb-1">Cloud Sync</h3>
                         <p class="text-editor-text-dim">Access anywhere</p>
                     </div>
@@ -155,51 +183,51 @@
             </div>
 
             <!-- Right Side - Auth Forms -->
-            <div class="animate-slide-in">
-                <div class="glass-effect rounded-2xl p-8 shadow-2xl relative overflow-hidden">
+            <div class="animate-slide-in order-1 lg:order-2 px-2 sm:px-4 lg:px-0">
+                <div class="glass-effect rounded-xl lg:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl relative overflow-hidden w-full max-w-md mx-auto lg:max-w-none">
                     
                     <!-- Toggle Buttons -->
-                    <div class="flex mb-8 bg-editor-bg rounded-lg p-1">
+                    <div class="flex mb-6 lg:mb-8 bg-editor-bg rounded-lg p-1">
                         <button onclick="switchToLogin()" id="loginTab" 
-                                class="flex-1 py-3 px-4 text-center rounded-md transition-all duration-300 font-semibold bg-editor-accent text-white">
-                            <i class="fas fa-sign-in-alt mr-2"></i>Login
+                                class="flex-1 py-2 sm:py-3 px-2 sm:px-4 text-center rounded-md transition-all duration-300 font-semibold bg-editor-accent text-white text-sm sm:text-base">
+                            <i class="fas fa-sign-in-alt mr-1 sm:mr-2"></i>Login
                         </button>
                         <button onclick="switchToRegister()" id="registerTab"
-                                class="flex-1 py-3 px-4 text-center rounded-md transition-all duration-300 font-semibold text-editor-text-dim hover:text-editor-text">
-                            <i class="fas fa-user-plus mr-2"></i>Register
+                                class="flex-1 py-2 sm:py-3 px-2 sm:px-4 text-center rounded-md transition-all duration-300 font-semibold text-editor-text-dim hover:text-editor-text text-sm sm:text-base">
+                            <i class="fas fa-user-plus mr-1 sm:mr-2"></i>Register
                         </button>
                     </div>
 
                     <!-- Login Form -->
                     <div id="loginForm" class="form-slide">
-                        <form action="/login" method="post" class="space-y-6">
-                            <div class="text-center mb-8">
-                                <h2 class="text-2xl font-bold text-editor-text mb-2">Welcome Back!</h2>
-                                <p class="text-editor-text-dim">Sign in to continue your coding journey</p>
+                        <form action="/login" method="post" class="space-y-4 sm:space-y-6">
+                            <div class="text-center mb-6 lg:mb-8">
+                                <h2 class="text-xl sm:text-2xl font-bold text-editor-text mb-2">Welcome Back!</h2>
+                                <p class="text-editor-text-dim text-sm sm:text-base">Sign in to continue your coding journey</p>
                             </div>
 
-                            <div class="space-y-4">
+                            <div class="space-y-3 sm:space-y-4">
                                 <div>
-                                    <label for="username" class="block text-sm font-semibold text-editor-text mb-2">
+                                    <label for="username" class="block text-xs sm:text-sm font-semibold text-editor-text mb-2">
                                         <i class="fas fa-user mr-2"></i>Username
                                     </label>
                                     <input type="text" name="username" id="username" required
-                                           class="w-full px-4 py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300"
+                                           class="w-full px-3 sm:px-4 py-2 sm:py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300 text-sm sm:text-base"
                                            placeholder="Enter your username">
                                 </div>
 
                                 <div>
-                                    <label for="password" class="block text-sm font-semibold text-editor-text mb-2">
+                                    <label for="password" class="block text-xs sm:text-sm font-semibold text-editor-text mb-2">
                                         <i class="fas fa-lock mr-2"></i>Password
                                     </label>
                                     <input type="password" name="password" id="password" required
-                                           class="w-full px-4 py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300"
+                                           class="w-full px-3 sm:px-4 py-2 sm:py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300 text-sm sm:text-base"
                                            placeholder="Enter your password">
                                 </div>
                             </div>
 
                             <button type="submit" 
-                                    class="w-full bg-gradient-to-r from-editor-accent to-editor-accent-dark hover:from-editor-accent-dark hover:to-editor-accent text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                    class="w-full bg-gradient-to-r from-editor-accent to-editor-accent-dark hover:from-editor-accent-dark hover:to-editor-accent text-white font-bold py-2 sm:py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base">
                                 <i class="fas fa-rocket mr-2"></i>Launch Into CodeNotes
                             </button>
                         </form>
@@ -207,60 +235,60 @@
 
                     <!-- Register Form -->
                     <div id="registerForm" class="form-slide hidden">
-                        <form action="/register" method="post" class="space-y-6">
-                            <div class="text-center mb-8">
-                                <h2 class="text-2xl font-bold text-editor-text mb-2">Join CodeNotes</h2>
-                                <p class="text-editor-text-dim">Create your developer account</p>
+                        <form action="/register" method="post" class="space-y-4 sm:space-y-6">
+                            <div class="text-center mb-6 lg:mb-8">
+                                <h2 class="text-xl sm:text-2xl font-bold text-editor-text mb-2">Join CodeNotes</h2>
+                                <p class="text-editor-text-dim text-sm sm:text-base">Create your developer account</p>
                             </div>
 
-                            <div class="space-y-4">
+                            <div class="space-y-3 sm:space-y-4">
                                 <div>
-                                    <label for="reg-username" class="block text-sm font-semibold text-editor-text mb-2">
+                                    <label for="reg-name" class="block text-xs sm:text-sm font-semibold text-editor-text mb-2">
                                         <i class="fas fa-user mr-2"></i>Username
                                     </label>
-                                    <input type="text" name="name" id="reg-username" required
-                                           class="w-full px-4 py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300"
+                                    <input type="text" name="name" id="reg-name" required
+                                           class="w-full px-3 sm:px-4 py-2 sm:py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300 text-sm sm:text-base"
                                            placeholder="Choose a username">
                                 </div>
 
                                 <div>
-                                    <label for="email" class="block text-sm font-semibold text-editor-text mb-2">
+                                    <label for="email" class="block text-xs sm:text-sm font-semibold text-editor-text mb-2">
                                         <i class="fas fa-envelope mr-2"></i>Email
                                     </label>
                                     <input type="email" name="email" id="email" required
-                                           class="w-full px-4 py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300"
+                                           class="w-full px-3 sm:px-4 py-2 sm:py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300 text-sm sm:text-base"
                                            placeholder="Enter your email">
                                 </div>
 
                                 <div>
-                                    <label for="reg-password" class="block text-sm font-semibold text-editor-text mb-2">
+                                    <label for="reg-password" class="block text-xs sm:text-sm font-semibold text-editor-text mb-2">
                                         <i class="fas fa-lock mr-2"></i>Password
                                     </label>
                                     <input type="password" name="password" id="reg-password" required
-                                           class="w-full px-4 py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300"
+                                           class="w-full px-3 sm:px-4 py-2 sm:py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300 text-sm sm:text-base"
                                            placeholder="Create a password">
                                 </div>
 
                                 <div>
-                                    <label for="confirm_password" class="block text-sm font-semibold text-editor-text mb-2">
+                                    <label for="confirm_password" class="block text-xs sm:text-sm font-semibold text-editor-text mb-2">
                                         <i class="fas fa-check-circle mr-2"></i>Confirm Password
                                     </label>
                                     <input type="password" name="confirm_password" id="confirm_password" required
-                                           class="w-full px-4 py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300"
+                                           class="w-full px-3 sm:px-4 py-2 sm:py-3 bg-editor-bg border border-editor-border rounded-lg text-editor-text placeholder-editor-text-dim focus:border-editor-accent focus:outline-none input-glow transition-all duration-300 text-sm sm:text-base"
                                            placeholder="Confirm your password">
                                 </div>
                             </div>
 
                             <button type="submit" 
-                                    class="w-full bg-gradient-to-r from-code-purple to-code-blue hover:from-code-blue hover:to-code-purple text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                    class="w-full bg-gradient-to-r from-code-purple to-code-blue hover:from-code-blue hover:to-code-purple text-white font-bold py-2 sm:py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base">
                                 <i class="fas fa-user-plus mr-2"></i>Create Developer Account
                             </button>
                         </form>
                     </div>
 
                     <!-- Back to Home -->
-                    <div class="mt-6 text-center">
-                        <a href="/" class="text-editor-text-dim hover:text-editor-accent transition-colors duration-300 inline-flex items-center">
+                    <div class="mt-4 sm:mt-6 text-center">
+                        <a href="/" class="text-editor-text-dim hover:text-editor-accent transition-colors duration-300 inline-flex items-center text-sm sm:text-base">
                             <i class="fas fa-arrow-left mr-2"></i>
                             Back to CodeNotes
                         </a>
@@ -272,25 +300,35 @@
 
     <script>
         function switchToLogin() {
-            document.getElementById('loginForm').classList.remove('hidden');
-            document.getElementById('registerForm').classList.add('hidden');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
             
-            document.getElementById('loginTab').classList.add('bg-editor-accent', 'text-white');
-            document.getElementById('loginTab').classList.remove('text-editor-text-dim');
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
             
-            document.getElementById('registerTab').classList.remove('bg-editor-accent', 'text-white');
-            document.getElementById('registerTab').classList.add('text-editor-text-dim');
+            loginTab.classList.add('bg-editor-accent', 'text-white');
+            loginTab.classList.remove('text-editor-text-dim');
+            
+            registerTab.classList.remove('bg-editor-accent', 'text-white');
+            registerTab.classList.add('text-editor-text-dim');
         }
 
         function switchToRegister() {
-            document.getElementById('registerForm').classList.remove('hidden');
-            document.getElementById('loginForm').classList.add('hidden');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
             
-            document.getElementById('registerTab').classList.add('bg-editor-accent', 'text-white');
-            document.getElementById('registerTab').classList.remove('text-editor-text-dim');
+            registerForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
             
-            document.getElementById('loginTab').classList.remove('bg-editor-accent', 'text-white');
-            document.getElementById('loginTab').classList.add('text-editor-text-dim');
+            registerTab.classList.add('bg-editor-accent', 'text-white');
+            registerTab.classList.remove('text-editor-text-dim');
+            
+            loginTab.classList.remove('bg-editor-accent', 'text-white');
+            loginTab.classList.add('text-editor-text-dim');
         }
 
         // Auto-start typing animation
@@ -305,41 +343,70 @@
             const typingElement = document.querySelector('.typing-animation');
             
             function typeText() {
-                typingElement.style.width = '0';
-                typingElement.textContent = typingTexts[currentIndex];
-                
-                setTimeout(() => {
+                if (typingElement) {
+                    typingElement.textContent = typingTexts[currentIndex];
                     currentIndex = (currentIndex + 1) % typingTexts.length;
-                    typeText();
-                }, 4000);
+                }
             }
             
+            // Start immediately and repeat
             typeText();
+            setInterval(typeText, 4000);
         });
 
         // Form validation for register
-        document.getElementById('registerForm').querySelector('form').addEventListener('submit', function(e) {
-            const password = document.getElementById('reg-password').value;
-            const confirmPassword = document.getElementById('confirm_password').value;
-            
-            if (password !== confirmPassword) {
-                e.preventDefault();
-                alert('Passwords do not match!');
-                return false;
+        document.addEventListener('DOMContentLoaded', function() {
+            const registerForm = document.querySelector('#registerForm form');
+            if (registerForm) {
+                registerForm.addEventListener('submit', function(e) {
+                    const password = document.getElementById('reg-password').value;
+                    const confirmPassword = document.getElementById('confirm_password').value;
+                    
+                    if (password !== confirmPassword) {
+                        e.preventDefault();
+                        showToast('Passwords do not match!', 'error');
+                        return false;
+                    }
+                    
+                    // Basic password validation
+                    if (password.length < 8) {
+                        e.preventDefault();
+                        showToast('Password must be at least 8 characters long!', 'error');
+                        return false;
+                    }
+                });
             }
         });
 
-        // Add focus effects to inputs
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.classList.add('scale-105');
-            });
-            
-            input.addEventListener('blur', function() {
-                this.parentElement.classList.remove('scale-105');
+        // Enhanced focus effects
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('transform', 'scale-105');
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('transform', 'scale-105');
+                });
             });
         });
+
+        // Toast helper function
+        function showToast(message, type = 'error') {
+            const styles = {
+                error: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" },
+                success: { background: "linear-gradient(to right, #00b09b, #96c93d)" },
+                warning: { background: "linear-gradient(to right, #ffa726, #ffcc02)" }
+            };
+            
+            Toastify({
+                text: message,
+                duration: 3000,
+                style: styles[type] || styles.error
+            }).showToast();
+        }
     </script>
+
     <!-- Set data in script-accessible way -->
 <script>
   window.flashMessages = {
@@ -375,6 +442,5 @@
     }).showToast();
   }
 </script>
-
 </body>
 </html>

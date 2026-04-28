@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - CodeNotes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Add Toastify CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'editor-bg': '#0d1117',
+              'editor-card': '#161b22',
+              'editor-border': '#30363d',
+              'editor-accent': '#58a6ff',
+              'editor-text': '#f0f6fc',
+              'editor-text-dim': '#7d8590',
+            }
+          }
+        }
+      }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-editor-bg text-editor-text min-h-screen flex items-center justify-center">
+    <div class="max-w-md w-full mx-auto text-center">
+        <div class="bg-editor-card border border-editor-border rounded-xl p-8 shadow-xl">
+            <!-- Error Icon -->
+            <div class="text-6xl text-red-500 mb-6">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            
+            <!-- Error Title -->
+            <h1 class="text-2xl font-bold text-editor-text mb-4">
+                Oops! Something went wrong
+            </h1>
+            
+            <!-- Error Message -->
+            <div class="text-editor-text-dim mb-6">
+                <h2 class="text-lg font-semibold mb-2"><%= error || 'An unexpected error occurred' %></h2>
+                <p class="text-sm"><%= message || 'Please try again later or contact support if the problem persists.' %></p>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="space-y-3">
+                <a href="javascript:history.back()" 
+                   class="block bg-editor-accent hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Go Back
+                </a>
+                <a href="/" 
+                   class="block bg-editor-border hover:bg-editor-text-dim hover:text-editor-bg text-editor-text px-6 py-3 rounded-lg font-medium transition-colors duration-200">
+                    <i class="fas fa-home mr-2"></i>
+                    Back to Home
+                </a>
+            </div>
+        </div>
+        
+        <!-- Additional Info -->
+        <div class="mt-6 text-xs text-editor-text-dim">
+            If you continue to experience issues, please 
+            <a href="/contact" class="text-editor-accent hover:underline">contact support</a>
+        </div>
+    </div>
+
+    <!-- Flash Messages -->
+    <script>
+      window.flashMessages = {
+        success: '<%= typeof success !== "undefined" ? success : "" %>',
+        error: '<%= typeof error !== "undefined" ? error : "" %>',
+        warning: '<%= typeof warning !== "undefined" ? warning : "" %>'
+      };
+    </script>
+
+    <script>
+      if (window.flashMessages.success) {
+        Toastify({
+          text: window.flashMessages.success,
+          duration: 3000,
+          style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
+        }).showToast();
+      }
+      
+      if (window.flashMessages.error) {
+        Toastify({
+          text: window.flashMessages.error,
+          duration: 3000,
+          style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
+        }).showToast();
+      }
+      
+      if (window.flashMessages.warning) {
+        Toastify({
+          text: window.flashMessages.warning,
+          duration: 3000,
+          style: { background: "linear-gradient(to right, #ffa726, #ffcc02)" }
+        }).showToast();
+      }
+    </script>
+</body>
+</html>

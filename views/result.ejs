@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversion Result - PDF to HTML</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .file-name {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .controls { 
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .control-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn { 
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .content-wrapper {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .content-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #6c757d;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .tab:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+        
+        .html-content { 
+            padding: 30px;
+            background: white;
+            min-height: 500px;
+            overflow-x: auto;
+        }
+        
+        .html-editor { 
+            width: 100%; 
+            min-height: 500px; 
+            padding: 20px;
+            border: none;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            background: #f8f9fa;
+            resize: vertical;
+            outline: none;
+        }
+        
+        .status-bar {
+            background: #f8f9fa;
+            padding: 10px 20px;
+            border-top: 1px solid #dee2e6;
+            font-size: 0.9rem;
+            color: #6c757d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .word-count {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .control-group {
+                justify-content: center;
+            }
+            
+            .content-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div>
+                <h1>✅ Conversion Complete</h1>
+                <div class="file-name">📄 <%= originalName %></div>
+            </div>
+            <div class="header-actions">
+                <a href="/" class="btn btn-outline">🔄 Convert Another</a>
+                <% if (typeof username !== 'undefined' && username) { %>
+                    <a href="/api/dashboard" class="btn btn-outline">🏠 Dashboard</a>
+                <% } else { %>
+                    <a href="/api/dashboard" class="btn btn-outline">🏠 Home</a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Success Alert -->
+        <div class="alert alert-success">
+            🎉 Your PDF has been successfully converted to HTML! You can now preview, edit, and download the result.
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <button class="btn btn-primary" onclick="toggleView()">
+                    <span id="toggleIcon">👁️</span> <span id="toggleText">Switch to Code View</span>
+                </button>
+                <button class="btn btn-secondary" onclick="editText()">✏️ Edit HTML</button>
+                <button class="btn btn-info" onclick="copyToClipboard()">📋 Copy HTML</button>
+            </div>
+            <div class="control-group">
+                <button class="btn btn-success" onclick="downloadHTML()">💾 Download HTML</button>
+                <button class="btn btn-secondary" onclick="printContent()">🖨️ Print</button>
+            </div>
+        </div>
+        
+        <div class="content-wrapper">
+            <div class="content-tabs">
+                <button class="tab active" data-tab="preview">🔍 Preview</button>
+                <button class="tab" data-tab="code">💻 HTML Code</button>
+                <button class="tab" data-tab="formatted">📋 Formatted</button>
+            </div>
+            
+            <div id="preview" class="html-content">
+                <%- htmlContent %>
+            </div>
+            
+            <textarea id="htmlEditor" class="html-editor" style="display: none;"><%= htmlContent %></textarea>
+            
+            <div id="formatted" class="html-content" style="display: none;">
+                <pre><code id="formattedCode"></code></pre>
+            </div>
+            
+            <div class="status-bar">
+                <div class="word-count">
+                    <span>Characters: <strong id="charCount">0</strong></span>
+                    <span>Words: <strong id="wordCount">0</strong></span>
+                    <span>Lines: <strong id="lineCount">0</strong></span>
+                </div>
+                <div>
+                    <span id="lastModified">Ready to edit</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let isPreview = true;
+        let originalContent        // Set initial content in editor
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('htmlEditor').value = originalContent;
+        });        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            setupTabSwitching();
+            setupAutoSave();
+            formatCodeView();
+        });
+        
+        // Tab switching
+        function setupTabSwitching() {
+            const tabs = document.querySelectorAll('.tab');
+            const preview = document.getElementById('preview');
+            const editor = document.getElementById('htmlEditor');
+            const formatted = document.getElementById('formatted');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all content areas
+                    preview.style.display = 'none';
+                    editor.style.display = 'none';
+                    formatted.style.display = 'none';
+                    
+                    // Show selected content area
+                    const tabType = this.dataset.tab;
+                    if (tabType === 'preview') {
+                        preview.style.display = 'block';
+                        updatePreview();
+                    } else if (tabType === 'code') {
+                        editor.style.display = 'block';
+                        updateStats();
+                    } else if (tabType === 'formatted') {
+                        formatted.style.display = 'block';
+                        formatCodeView();
+                    }
+                });
+            });
+        }
+        
+        function toggleView() {
+            const preview = document.getElementById('preview');
+            const editor = document.getElementById('htmlEditor');
+            const toggleIcon = document.getElementById('toggleIcon');
+            const toggleText = document.getElementById('toggleText');
+            
+            if (isPreview) {
+                preview.style.display = 'none';
+                editor.style.display = 'block';
+                toggleIcon.textContent = '👁️';
+                toggleText.textContent = 'Switch to Preview';
+                isPreview = false;
+                updateStats();
+            } else {
+                updatePreview();
+                preview.style.display = 'block';
+                editor.style.display = 'none';
+                toggleIcon.textContent = '💻';
+                toggleText.textContent = 'Switch to Code View';
+                isPreview = true;
+            }
+        }
+        
+        function updatePreview() {
+            const editor = document.getElementById('htmlEditor');
+            const preview = document.getElementById('preview');
+            preview.innerHTML = editor.value;
+        }
+        
+        function editText() {
+            const editor = document.getElementById('htmlEditor');
+            const preview = document.getElementById('preview');
+            
+            // Switch to code tab
+            document.querySelector('[data-tab="code"]').click();
+            editor.focus();
+        }
+        
+        function downloadHTML() {
+            const content = document.getElementById('htmlEditor').value;
+            const blob = new Blob([content], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '<%= originalName.replace(".pdf", "") %>_converted.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('HTML file downloaded successfully!', 'success');
+        }
+        
+        function copyToClipboard() {
+            const content = document.getElementById('htmlEditor').value;
+            navigator.clipboard.writeText(content).then(function() {
+                showNotification('HTML code copied to clipboard!', 'success');
+            }, function() {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = content;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showNotification('HTML code copied to clipboard!', 'success');
+            });
+        }
+        
+        function printContent() {
+            const content = document.getElementById('preview').innerHTML;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Print - <%= originalName %></title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        @media print { body { margin: 0; } }
+                    </style>
+                </head>
+                <body>${content}</body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+        
+        function updateStats() {
+            const editor = document.getElementById('htmlEditor');
+            const content = editor.value;
+            
+            document.getElementById('charCount').textContent = content.length.toLocaleString();
+            document.getElementById('wordCount').textContent = content.split(/\s+/).filter(word => word.length > 0).length.toLocaleString();
+            document.getElementById('lineCount').textContent = content.split('\n').length.toLocaleString();
+        }
+        
+        function formatCodeView() {
+            const editor = document.getElementById('htmlEditor');
+            const formatted = document.getElementById('formattedCode');
+            formatted.textContent = editor.value;
+        }
+        
+        function setupAutoSave() {
+            const editor = document.getElementById('htmlEditor');
+            let saveTimeout;
+            
+            editor.addEventListener('input', function() {
+                updateStats();
+                document.getElementById('lastModified').textContent = 'Modified - ' + new Date().toLocaleTimeString();
+                
+                // Clear existing timeout
+                clearTimeout(saveTimeout);
+                
+                // Set new timeout for auto-save (optional - could save to localStorage)
+                saveTimeout = setTimeout(function() {
+                    // Auto-save logic here if needed
+                    console.log('Auto-saved');
+                }, 2000);
+            });
+        }
+        
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type}`;
+            notification.textContent = message;
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.zIndex = '9999';
+            notification.style.minWidth = '300px';
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 's':
+                        e.preventDefault();
+                        downloadHTML();
+                        break;
+                    case 'p':
+                        e.preventDefault();
+                        printContent();
+                        break;
+                    case 'e':
+                        e.preventDefault();
+                        editText();
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

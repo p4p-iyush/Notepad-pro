@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title><%= doc.title %> — ThoughtVault</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Prism.js -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+  <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body class="bg-gray-950 text-white min-h-screen">
+
+  <!-- ── Top Bar ── -->
+  <header class="bg-gray-900 border-b border-gray-800 px-6 py-3 flex items-center justify-between sticky top-0 z-50">
+
+    <!-- Left: back + title -->
+    <div class="flex items-center gap-4 flex-1">
+      <a href="/dashboard" class="text-gray-500 hover:text-white transition text-xl">←</a>
+      <input
+        id="docTitle"
+        type="text"
+        value="<%= doc.title %>"
+        placeholder="Untitled"
+        class="bg-transparent text-xl font-bold text-white placeholder-gray-600
+               focus:outline-none border-b border-transparent focus:border-violet-500
+               transition w-full max-w-md"
+      />
+    </div>
+
+    <!-- Right: visibility + save status -->
+    <div class="flex items-center gap-3">
+
+      <!-- Visibility toggle -->
+      <select id="docVisibility"
+        class="bg-gray-800 border border-gray-700 text-sm text-gray-300 rounded-lg
+               px-3 py-1.5 focus:outline-none focus:border-violet-500 transition">
+        <option value="private" <%= doc.visibility === 'private' ? 'selected' : '' %>>🔒 Private</option>
+        <option value="public"  <%= doc.visibility === 'public'  ? 'selected' : '' %>>🌐 Public</option>
+      </select>
+
+      <!-- Save status -->
+      <span id="saveStatus" class="text-xs text-gray-600">All saved ✓</span>
+
+      <!-- Manual save -->
+      <button onclick="saveDoc()"
+        class="bg-violet-600 hover:bg-violet-700 text-white text-sm
+               px-4 py-1.5 rounded-lg transition font-medium">
+        Save
+      </button>
+
+      <!-- Back to dashboard -->
+      <a href="/dashboard"
+        class="text-sm bg-gray-800 hover:bg-gray-700 text-gray-300
+               px-3 py-1.5 rounded-lg transition">
+        🧠 Home
+      </a>
+
+    </div>
+  </header>
+
+  <!-- ── Editor Body ── -->
+  <div class="max-w-3xl mx-auto px-4 py-10">
+
+    <!-- Blocks Container -->
+    <div id="blocksContainer" class="space-y-4">
+      <!-- blocks injected by JS -->
+    </div>
+
+    <!-- ── Add Block Buttons ── -->
+    <div class="flex gap-3 mt-8 justify-center">
+      <button onclick="addBlock('text')"
+        class="add-block-btn flex items-center gap-2 px-5 py-2.5 rounded-xl
+               bg-gray-900 border border-gray-700 hover:border-violet-500
+               text-gray-400 hover:text-violet-400 transition text-sm font-medium">
+        📝 Text
+      </button>
+      <button onclick="addBlock('code')"
+        class="add-block-btn flex items-center gap-2 px-5 py-2.5 rounded-xl
+               bg-gray-900 border border-gray-700 hover:border-violet-500
+               text-gray-400 hover:text-violet-400 transition text-sm font-medium">
+        💻 Code
+      </button>
+      <button onclick="addBlock('todo')"
+        class="add-block-btn flex items-center gap-2 px-5 py-2.5 rounded-xl
+               bg-gray-900 border border-gray-700 hover:border-violet-500
+               text-gray-400 hover:text-violet-400 transition text-sm font-medium">
+        ✅ Todo
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ── Text Formatting Toolbar (floating) ── -->
+  <div id="floatingToolbar"
+    class="hidden fixed z-50 bg-gray-800 border border-gray-700 rounded-xl
+           shadow-2xl px-2 py-1.5 flex gap-1 items-center">
+    <button onclick="fmt('bold')"           class="toolbar-btn font-bold">B</button>
+    <button onclick="fmt('italic')"         class="toolbar-btn italic">I</button>
+    <button onclick="fmt('underline')"      class="toolbar-btn underline">U</button>
+    <button onclick="fmt('strikeThrough')"  class="toolbar-btn line-through">S</button>
+    <div class="w-px bg-gray-600 mx-1 h-5"></div>
+    <button onclick="fmt('justifyLeft')"    class="toolbar-btn">≡L</button>
+    <button onclick="fmt('justifyCenter')"  class="toolbar-btn">≡C</button>
+    <button onclick="fmt('justifyRight')"   class="toolbar-btn">≡R</button>
+    <div class="w-px bg-gray-600 mx-1 h-5"></div>
+    <select onchange="fmt('fontSize', this.value); this.value=3"
+      class="toolbar-select text-xs">
+      <option value="1">XS</option>
+      <option value="2">S</option>
+      <option value="3">M</option>
+      <option value="4">L</option>
+      <option value="5">XL</option>
+      <option value="6">XXL</option>
+    </select>
+    <input type="color" title="Text color"
+      onchange="fmt('foreColor', this.value)"
+      class="w-6 h-6 rounded cursor-pointer bg-transparent border-0"/>
+    <input type="color" title="Highlight"
+      onchange="fmt('hiliteColor', this.value)"
+      class="w-6 h-6 rounded cursor-pointer bg-transparent border-0"/>
+    <div class="w-px bg-gray-600 mx-1 h-5"></div>
+    <button onclick="fmt('insertUnorderedList')" class="toolbar-btn">• List</button>
+    <button onclick="fmt('insertOrderedList')"   class="toolbar-btn">1. List</button>
+  </div>
+
+  <!-- ── Pass doc data to JS ── -->
+<script>
+  const DOC_ID = '<%= doc._id %>';
+  const BLOCKS = <%- JSON.stringify(doc.blocks.map(b => ({
+    id:      b.id,
+    type:    b.type,
+    content: b.content ?? (b.type === 'todo' ? [] : b.type === 'code' ? { language: 'javascript', code: '' } : '')
+  }))) %>;
+</script>
+  <script src="/js/editor.js"></script>
+
+</body>
+</html>

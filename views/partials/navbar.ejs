@@ -1,0 +1,50 @@
+<nav class="bg-gray-900 border-b border-gray-800 px-6 py-4 flex items-center justify-between sticky top-0 z-50">
+
+  <!-- Logo -->
+  <a href="/dashboard" class="text-xl font-bold text-violet-400">🧠 ThoughtVault</a>
+
+  <!-- Search -->
+  <div class="hidden md:flex items-center bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 w-72">
+    <svg class="w-4 h-4 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+    </svg>
+    <input
+      id="searchInput"
+      type="text"
+      placeholder="Search documents..."
+      class="bg-transparent text-sm text-white placeholder-gray-500 focus:outline-none w-full"
+    />
+  </div>
+
+  <!-- Right Side -->
+  <div class="flex items-center gap-4">
+
+    <!-- Filter -->
+    <div class="hidden md:flex gap-2 text-sm">
+      <button onclick="filterDocs('all')"
+        class="filter-btn active px-3 py-1 rounded-lg bg-violet-600 text-white transition"
+        data-filter="all">All
+      </button>
+      <button onclick="filterDocs('public')"
+        class="filter-btn px-3 py-1 rounded-lg bg-gray-800 text-gray-400 hover:bg-gray-700 transition"
+        data-filter="public">🌐 Public
+      </button>
+      <button onclick="filterDocs('private')"
+        class="filter-btn px-3 py-1 rounded-lg bg-gray-800 text-gray-400 hover:bg-gray-700 transition"
+        data-filter="private">🔒 Private
+      </button>
+    </div>
+
+    <!-- Username -->
+    <span class="text-gray-400 text-sm hidden md:block">👤 <%= user.username %></span>
+
+    <!-- Logout -->
+    <a href="/logout"
+      class="text-sm bg-gray-800 hover:bg-red-600 text-gray-300 hover:text-white
+             px-3 py-1.5 rounded-lg transition duration-200">
+      Logout
+    </a>
+
+  </div>
+</nav>

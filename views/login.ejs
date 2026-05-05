@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — ThoughtVault</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-950 text-white min-h-screen flex items-center justify-center">
+
+  <div class="bg-gray-900 p-8 rounded-2xl shadow-xl w-full max-w-md">
+
+    <!-- Logo -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-violet-400">🧠 ThoughtVault</h1>
+      <p class="text-gray-400 mt-1 text-sm">Your private space to think</p>
+    </div>
+
+    <!-- Error -->
+    <% if (locals.error) { %>
+      <div class="bg-red-500/20 border border-red-500 text-red-400 px-4 py-2 rounded-lg mb-4 text-sm">
+        <%= locals.error %>
+      </div>
+    <% } %>
+
+    <!-- Flash error -->
+    <% if (locals.error && Array.isArray(locals.error) && locals.error.length > 0) { %>
+      <div class="bg-red-500/20 border border-red-500 text-red-400 px-4 py-2 rounded-lg mb-4 text-sm">
+        <%= locals.error[0] %>
+      </div>
+    <% } %>
+
+    <!-- Form -->
+    <form action="/login" method="POST" class="space-y-5">
+
+      <div>
+        <label class="block text-sm text-gray-400 mb-1">Username</label>
+        <input
+          type="text"
+          name="username"
+          required
+          placeholder="Enter your username"
+          class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5
+                 text-white placeholder-gray-500 focus:outline-none focus:border-violet-500
+                 transition"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm text-gray-400 mb-1">Password</label>
+        <input
+          type="password"
+          name="password"
+          required
+          placeholder="Enter your password"
+          class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5
+                 text-white placeholder-gray-500 focus:outline-none focus:border-violet-500
+                 transition"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold
+               py-2.5 rounded-lg transition duration-200"
+      >
+        Login
+      </button>
+
+    </form>
+
+    <p class="text-center text-gray-500 text-sm mt-6">
+      Don't have an account?
+      <a href="/register" class="text-violet-400 hover:underline">Register</a>
+    </p>
+
+  </div>
+
+</body>
+</html>

@@ -1,1 +1,26 @@
 .env
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode/
+.idea/
+
+# Runtime data
+pids/
+*.pid
+
+# Optional npm cache
+.npm

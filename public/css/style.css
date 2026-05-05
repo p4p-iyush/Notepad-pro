@@ -1,0 +1,242 @@
+/* ── Toolbar Buttons ── */
+.toolbar-btn {
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  color: #d1d5db;
+  border-radius: 6px;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+.toolbar-btn:hover { background: #374151; }
+
+.toolbar-select {
+  background: #374151;
+  color: #d1d5db;
+  border-radius: 6px;
+  padding: 2px 4px;
+  font-size: 0.75rem;
+  border: none;
+  cursor: pointer;
+}
+
+/* ── Block Wrapper ── */
+.block-wrapper {
+  position: relative;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+.block-wrapper:hover {
+  border-color: rgba(139, 92, 246, 0.3);
+}
+.block-wrapper:hover .block-controls {
+  opacity: 1;
+}
+
+/* ── Block Controls (delete / move) ── */
+.block-controls {
+  opacity: 0;
+  transition: opacity 0.2s;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  z-index: 10;
+}
+.block-control-btn {
+  background: #1f2937;
+  border: 1px solid #374151;
+  color: #6b7280;
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.block-control-btn:hover {
+  background: #374151;
+  color: #fff;
+}
+.block-control-btn.delete:hover {
+  background: #7f1d1d;
+  border-color: #ef4444;
+  color: #fca5a5;
+}
+
+/* ── Text Block ── */
+.text-block {
+  min-height: 80px;
+  padding: 12px 16px;
+  background: #111827;
+  border-radius: 10px;
+  color: #e5e7eb;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  outline: none;
+  border: 1px solid #1f2937;
+  transition: border-color 0.2s;
+}
+.text-block:focus {
+  border-color: #7c3aed;
+}
+.text-block:empty:before {
+  content: attr(data-placeholder);
+  color: #4b5563;
+  pointer-events: none;
+}
+
+/* ── Text block prose styles ── */
+.text-block b, .text-block strong { font-weight: 600; }
+.text-block i, .text-block em     { font-style: italic; }
+.text-block u                     { text-decoration: underline; }
+.text-block s                     { text-decoration: line-through; }
+.text-block ul { list-style: disc;    padding-left: 1.5rem; }
+.text-block ol { list-style: decimal; padding-left: 1.5rem; }
+
+/* ── Code Block ── */
+.code-block-wrapper {
+  background: #0d1117;
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: #161b22;
+  border-bottom: 1px solid #1f2937;
+}
+.code-lang-select {
+  background: #1f2937;
+  color: #8b949e;
+  border: none;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+.code-textarea {
+  width: 100%;
+  background: #0d1117;
+  color: #79c0ff;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  padding: 14px;
+  border: none;
+  outline: none;
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* ── Todo Block ── */
+.todo-block-wrapper {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+  group: true;
+}
+.todo-check {
+  accent-color: #7c3aed;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.todo-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e5e7eb;
+  font-size: 0.9rem;
+}
+.todo-input::placeholder { color: #4b5563; }
+.todo-input.done {
+  text-decoration: line-through;
+  color: #4b5563;
+}
+.todo-delete {
+  opacity: 0;
+  color: #4b5563;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: all 0.15s;
+  background: none;
+  border: none;
+  padding: 0 4px;
+}
+.todo-item:hover .todo-delete {
+  opacity: 1;
+}
+.todo-delete:hover { color: #ef4444; }
+
+.add-todo-btn {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: #6b7280;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  transition: color 0.15s;
+}
+.add-todo-btn:hover { color: #7c3aed; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar        { width: 6px; }
+::-webkit-scrollbar-track  { background: #111; }
+::-webkit-scrollbar-thumb  { background: #4c1d95; border-radius: 4px; }
+
+/* ── Card hover glow ── */
+.doc-card:hover {
+  box-shadow: 0 0 0 1px rgba(139,92,246,0.3),
+              0 4px 24px rgba(139,92,246,0.08);
+}
+
+/* ── Filter button active ── */
+.filter-btn.active {
+  background-color: #7c3aed !important;
+  color: #fff !important;
+}
+
+/* ── Add block btn hover ── */
+.add-block-btn:hover {
+  box-shadow: 0 0 0 1px rgba(139,92,246,0.4);
+}
+
+/* ── Modal animation ── */
+#modal:not(.hidden) {
+  animation: fadeIn 0.15s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Floating toolbar animation ── */
+#floatingToolbar:not(.hidden) {
+  animation: popIn 0.1s ease;
+}
+@keyframes popIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Auto save pulse ── */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+.saving { animation: pulse 1s infinite; color: #7c3aed; }
